@@ -42,8 +42,23 @@ class Client {
   set bankOfActiveCard(bank) {
     this.#bankOfActiveCard = bank;
   }
+  getDiscount() {
+    if(this.#bankOfActiveCard === undefined) {
+      return 0;  
+    }
+    return this.#bankOfActiveCard.getDiscount(this);
+  }
   getBalance() {
+    if(this.#bankOfActiveCard === undefined) {
+      throw new Error(`Set the bank of client ${this.fullName}`);  
+    }
     return this.#bankOfActiveCard.getClientBalance(this);
+  }
+  setBalance(sum) {
+    if(this.#bankOfActiveCard === undefined) {
+      throw new Error(`Set the bank of client ${this.fullName}`);  
+    }
+    return this.#bankOfActiveCard.setClientBalance(this, sum);
   }
 }
 class Bank {
@@ -80,16 +95,15 @@ class Bank {
 }
 
 const calculateCost = (client, price) => {
-  const discount = client.bankOfActiveCard.getDiscount(client);
+  const discount = client.getDiscount();
   return price * (1 - discount/100);
 }
 
 const purchase = (client, price) => {
-  //const balance = client.bankOfActiveCard.getClientBalance(client);
   const balance = client.getBalance();
   if (price <= balance) {
-    client.bankOfActiveCard.setClientBalance(client, balance - price); 
-    return client.bankOfActiveCard.getClientBalance(client); 
+    client.setBalance(balance - price);
+    return client.getBalance(); 
   } else {
     throw new Error(`Not enough money, the lack of money is : ${Math.abs(balance - price)}`);
   }
@@ -117,7 +131,7 @@ bank3.addClientLevel(CLIENT_LEVEL_BASIC, 7);
 bank3.addClientLevel(CLIENT_LEVEL_PRO, 10);
 
 bank1.setClientBalance(client1, 1000);
-client1.bankOfActiveCard = bank1;
+//client1.bankOfActiveCard = bank1;
 const finalPrice = calculateCost(client1, 1000);
 try {
   const newBalance = purchase(client1, finalPrice);
