@@ -105,7 +105,7 @@ const purchase = (client, price) => {
     client.setBalance(balance - price);
     return client.getBalance(); 
   } else {
-    throw new Error(`Not enough money, the lack of money is : ${Math.abs(balance - price)}`);
+    throw new Error(`${client.fullName} has not enough money, the lack of money is : ${Math.abs(balance - price)}`);
   }
 }
 
@@ -131,31 +131,31 @@ bank3.addClientLevel(CLIENT_LEVEL_BASIC, 7);
 bank3.addClientLevel(CLIENT_LEVEL_PRO, 10);
 
 bank1.setClientBalance(client1, 1000);
-//client1.bankOfActiveCard = bank1;
+client1.bankOfActiveCard = bank1;
 const finalPrice = calculateCost(client1, 1000);
 try {
   const newBalance = purchase(client1, finalPrice);
-  console.log(`Transaction success, balance is : ${newBalance}`);
+  console.log(`Transaction success, balance of ${client1.fullName} in ${client1.bankOfActiveCard.bankName} is : ${newBalance}`);
 } catch (e) {
   console.error(e.message);
 }
 
-bank2.setClientBalance(client1, 1000);
+bank2.setClientBalance(client1, 100);
 client1.bankOfActiveCard = bank2;
 const finalPrice1 = calculateCost(client1, 1000);
 try {
   const newBalance1 = purchase(client1, finalPrice1);
-  console.log(`Transaction success, balance is : ${newBalance1}`);
+  console.log(`Transaction success, balance of ${client1.fullName} in ${client1.bankOfActiveCard.bankName} is : ${newBalance1}`);
 } catch (e) {
   console.error(e.message);
 }
 
 bank2.setClientBalance(client1, 1000);
-client2.bankOfActiveCard = bank2;
+//client2.bankOfActiveCard = bank2;
 const finalPrice2 = calculateCost(client2, 100);
 try {
   const newBalance2 = purchase(client2, finalPrice2);
-  console.log(`Transaction success, balance is : ${newBalance2}`);
+  console.log(`Transaction success, balance of ${client2.fullName} in ${client2.bankOfActiveCard.bankName} is : ${newBalance2}`);
 } catch (e) {
   console.error(e.message);
 }
