@@ -42,6 +42,9 @@ class Client {
   set bankOfActiveCard(bank) {
     this.#bankOfActiveCard = bank;
   }
+  getBalance() {
+    return this.#bankOfActiveCard.getClientBalance(this);
+  }
 }
 class Bank {
   #bankName;
@@ -82,7 +85,8 @@ const calculateCost = (client, price) => {
 }
 
 const purchase = (client, price) => {
-  const balance = client.bankOfActiveCard.getClientBalance(client);
+  //const balance = client.bankOfActiveCard.getClientBalance(client);
+  const balance = client.getBalance();
   if (price <= balance) {
     client.bankOfActiveCard.setClientBalance(client, balance - price); 
     return client.bankOfActiveCard.getClientBalance(client); 
